@@ -1,5 +1,3 @@
-// app/api/chat/route.js
-
 import { HfInference } from "@huggingface/inference";
 import { HuggingFaceStream, StreamingTextResponse } from "ai";
 
@@ -16,9 +14,9 @@ export async function POST(req) {
   const lastUserMessage = messages[messages.length - 1].content;
 
   // Request the HuggingFace API for the response based on the last user message
-  const response = await Hf.textGenerationStream({
-    model: "tiiuae/falcon-7b-instruct",
-    inputs: lastUserMessage, // Use the last user message as input
+  const response = await Hf.textToImage({
+    model: "SimianLuo/LCM_Dreamshaper_v7",
+    inputs: lastUserMessage,
     parameters: {
       max_new_tokens: 200,
       temperature: 0.5,
@@ -31,6 +29,7 @@ export async function POST(req) {
 
   // Convert the response into a friendly text-stream
   const stream = HuggingFaceStream(response);
+  console.log(stream, "is STREAMMMMM");
 
   // Respond with the stream
   return new StreamingTextResponse(stream);

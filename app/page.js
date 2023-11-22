@@ -1,7 +1,7 @@
-import Chat from "./chat";
+import ImageGenerationForm from "./generator";
 
 export const runtime = "edge";
 
 export default function Page() {
-  return <Chat />;
+  return <ImageGenerationForm />;
 }

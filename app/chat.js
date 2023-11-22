@@ -1,27 +1,30 @@
 "use client";
 import { useChat } from "ai/react";
 import "./globals.css";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "/api/chat",
   });
+  const query = async (data) => {
+    const response = await fetch(
+      "https://api-inference.huggingface.co/models/SimianLuo/LCM_Dreamshaper_v7",
+      {
+        headers: {
+          Authorization: "Bearer " + process.env.HUGGINGFACE_API_KEY,
+        },
+        method: "POST",
+        body: JSON.stringify(data),
+      }
+    );
+    const result = await response.blob();
+    return result;
+  };
 
   return (
     <div className="flex flex-col h-screen bg-black">
-      {/* Navbar */}
-      <div className="bg-gray-800 flex items-center justify-center">
-        <Image
-          src="/ai.png" // Assuming the image is in the public folder
-          alt="AI Mowsky"
-          width={150}
-          height={0}
-        />
-      </div>
-
-      {/* Chat container */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Chat messages */}
         <div className="flex-1 overflow-x-hidden overflow-y-scroll bg-dark">
